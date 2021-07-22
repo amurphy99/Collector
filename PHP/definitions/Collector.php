@@ -474,7 +474,7 @@ function get_settings_with_defaults($provided_vals, $trial_type) {
 function get_default_settings($trial_type) {
     $filename = get_trial_file($trial_type, 'settings.tcon');
     
-    if (!is_file($filename)) return[];
+    if (!is_file($filename)) return [];
     
     try {
         $defaults = parse_settings(file_get_contents($filename));
@@ -483,14 +483,33 @@ function get_default_settings($trial_type) {
         throw new Exception("Failed to parse tcon file 'settings.tcon' in the '$trial_type' trial type folder, error message:\n $msg");
     }
     
-    foreach ($defaults as $key => $val) {
+    $defaults = get_settings_without_values($defaults);
+    $defaults = get_settings_with_modded_defaults($defaults, $filename);
+    
+    return $defaults;
+}
+
+function get_settings_without_values($settings) {
+    foreach ($settings as $key => $val) {
         if (gettype($key) === 'integer') {
-            unset($defaults[$key]);
-            $defaults[$val] = null;
+            unset($settings[$key]);
+            $settings[$val] = null;
         }
     }
     
-    return $defaults;
+    return $settings;
+}
+
+function get_settings_with_modded_defaults($settings, $filename) {
+    $mod_file = dirname($filename) . '/'
+              . pathinfo($filename, PATHINFO_FILENAME) . '-mod.json';
+    
+    if (is_file($mod_file)) {
+        $new_defaults = json_decode(file_get_contents($mod_file), true);
+        $settings = array_merge($settings, $new_defaults);
+    }
+    
+    return $settings;
 }
 
 function get_array_average($values) {
