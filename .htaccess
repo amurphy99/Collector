@@ -22,7 +22,7 @@ RewriteRule ^([^/]+)/$ %{REQUEST_URI}login/ [L,R=302]
 
 # redirect Exp/login to Exp/login/
 RewriteCond Experiments/$1/consent.pdf -F
-RewriteCond $2 !consent\.pdf
+RewriteCond $2 !^consent(-?.*)\.pdf
 RewriteRule ^([^/]+)/([^/]+)$ %{REQUEST_URI}/ [L,R=302]
 
 # route Exp/data/ to PHP/data/ with D_EXP set
@@ -33,6 +33,11 @@ RewriteRule ^([^/]+)/data/(.*)$ PHP/data/$2 [END,NC,QSA,E=D_EXP:$1]
 RewriteCond Experiments/$1/consent.pdf -F
 RewriteCond Pages/$2.php -F
 RewriteRule ^([^/]+)/([^/]+)/$ PHP/init.php [END,QSA,E=EXP:$1,E=PAGE:$2]
+
+# route Exp/login/extra/ to init.php with EXP, PAGE, and POOL set
+RewriteCond Experiments/$1/consent.pdf -F
+RewriteCond Pages/$2.php -F
+RewriteRule ^([^/]+)/([^/]+)/([^/]+)/?$ PHP/init.php [END,QSA,E=EXP:$1,E=PAGE:$2,E=POOL:$3]
 
 # route Exp/consent.pdf to Experiments/Exp/consent.pdf
 RewriteCond Experiments/$1/consent.pdf -F

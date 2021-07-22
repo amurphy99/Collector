@@ -109,7 +109,16 @@ function get_input_conditions_index() {
 }
 
 function get_consent_path() {
-    return CURR_EXP . '/consent.pdf';
+    $dir = ROOT . '/Experiments/' . CURR_EXP;
+    
+    $file = (defined('POOL') and is_file("$dir/consent-" . POOL . '.pdf'))
+          ? 'consent-' . POOL . '.pdf'
+          : 'consent.pdf';
+          
+    $path = CURR_EXP . "/$file";
+    $real_path = "$dir/$file";
+    $m = filemtime($real_path);
+    return "$path?v=$m";
 }
 
 function has_more_experiment_to_do($session) {
@@ -139,6 +148,9 @@ function get_login_info($prev_id = '') {
         'IP'         => get_server_input('REMOTE_ADDR'),
         'Cond_Index' => get_input_conditions_index(),
     ];
+    
+    if (defined('POOL')) $user_info['Pool'] = POOL;
+    
     $condition_info = get_array_with_prefixed_keys($_SESSION['Condition'], 'Condition_');
     $user_agent_info = get_user_agent_info();
     return $user_info + $condition_info + $user_agent_info;
@@ -205,9 +217,10 @@ function get_random_assignment($conditions) {
 }
 
 function get_counter_filename() {
-    $counter_file = get_data_filename('counter',
-        ['c-index' => get_input_conditions_index()]
-    );
+    $vars = ['c-index' => get_input_conditions_index()];
+    $vars['pool'] = defined('POOL') ? '-' . POOL : '';
+    
+    $counter_file = get_data_filename('counter', $vars);
     
     $dir = dirname($counter_file);
     

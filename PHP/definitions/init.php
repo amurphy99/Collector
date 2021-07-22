@@ -3,15 +3,27 @@
 function define_exp_constants() {
     if (getenv('REDIRECT_EXP'))  define('CURR_EXP', getenv('REDIRECT_EXP'));
     if (getenv('REDIRECT_PAGE')) define('PAGE',     getenv('REDIRECT_PAGE'));
+    if (getenv('REDIRECT_POOL')) define('POOL',     getenv('REDIRECT_POOL'));
 }
 
 function initialize_page() {
     if (!is_file(get_requested_page_path())) give_404();
     
-    define('URL_TO_ROOT', '../..');
+    define('URL_TO_ROOT', get_exp_url_to_root());
     start_session();
     start_main_output_buffer();
     require get_requested_page_path();
+}
+
+function get_exp_url_to_root() {
+    $url_to_root = '../..';
+    $uri = get_server_input('REQUEST_URI');
+    
+    if (defined('POOL') and substr($uri, -1) === '/') {
+        $url_to_root .= '/..';
+    }
+    
+    return $url_to_root;
 }
 
 function start_main_output_buffer() {

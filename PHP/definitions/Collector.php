@@ -34,7 +34,7 @@ function get_data_filename($data_type, $vars = []) {
         case 'sess':     $filename = "user/user_$username.json"; break;
         case 'output':   $filename = "Output/Output_{$username}.csv"; break;
         case 'login':    $filename = 'login.csv'; break;
-        case 'counter':  $filename = "counter_{$vars['c-index']}.txt"; break;
+        case 'counter':  $filename = "counter_{$vars['c-index']}{$vars['pool']}.txt"; break;
         default: trigger_error("data type '$data_type' not recognized", E_USER_ERROR);
     }
     
@@ -205,7 +205,6 @@ function get_config($setting = null) {
         }
         
         foreach ($paths as $path) {
-            $config = array_merge($config, Parse::fromConfig($path));
             $config = array_merge($config, read_config_file($path));
         }
     }
