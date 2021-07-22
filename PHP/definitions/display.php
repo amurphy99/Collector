@@ -31,15 +31,12 @@ function htmlspecialchars_recursive($input, $flags = ENT_COMPAT | ENT_HTML401)
         return is_string($input) ? htmlspecialchars($input, $flags) : $input;
     }
     
-    return $input;
-    
-    // I dont think array_walk_recursive can filter the array keys
+    // need to encode both keys and values of array
     $output = [];
     
     foreach ($input as $key => $val) {
-        $output[htmlspecialchars($key, $flags)] = is_array($val)
-            ? htmlspecialchars_recursive($val)
-            : (is_string($val) ? htmlspecialchars($val, $flags) : $val);
+        $output[htmlspecialchars($key, $flags)] =
+            htmlspecialchars_recursive($val, $flags);
     }
     
     return $output;
