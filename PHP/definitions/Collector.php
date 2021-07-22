@@ -206,6 +206,7 @@ function get_config($setting = null) {
         
         foreach ($paths as $path) {
             $config = array_merge($config, Parse::fromConfig($path));
+            $config = array_merge($config, read_config_file($path));
         }
     }
     
@@ -216,6 +217,21 @@ function get_config($setting = null) {
     } else {
         return $config[$setting];
     }
+}
+
+function read_config_file($filename) {
+    $config = Parse::fromConfig($filename);
+    $mod = dirname($filename) . '/config-mod.json';
+    
+    if (is_file($mod) and filemtime($mod) >= filemtime($filename)) {
+        $mod_vals = json_decode(file_get_contents($mod), true);
+        
+        foreach ($mod_vals as $setting => $val) {
+            $config[$setting] = $val;
+        }
+    }
+    
+    return $config;
 }
 
 function get_exp_data_dir() {

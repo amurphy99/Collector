@@ -312,7 +312,21 @@ const COLLECTOR = {
             if (typeof on_trial_start === "function") on_trial_start();
             
             multi_trial.init();
+            
+            if (COLLECTOR.admin) {
+                this.enable_admin();
+            }
         },
+        
+        enable_admin: function() {
+            console.log("enabling admin");
+            
+            document.addEventListener("keydown", e => {
+                if (e.ctrlKey && e.key === "ArrowRight") {
+                    COLLECTOR.get_submit_button().click();
+                }
+            });
+        }
     },
 };
 

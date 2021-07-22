@@ -2,3 +2,4 @@
 *.~lock.*
 /PHP/admin/pass.txt
 /PHP/admin/sess/*
+*-mod.json
