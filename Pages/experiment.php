@@ -21,6 +21,7 @@ if (is_file(get_trial_file($trial_type, 'definitions.php'))) {
 }
 
 // run the trial
+load_autosaver($trial_type);
 link_trial_type_file($trial_type, 'style.css');
 
 ?><form method="post" class="invisible exp-form" id="content" autocomplete="off"><?php

@@ -3,9 +3,13 @@
 require __DIR__ . '/experiment-record.php';
 
 function check_if_experiment_is_done() {
-    if (!isset($_SESSION['Procedure'][$_SESSION['Position']])) {
+    if (is_experiment_done()) {
         redirect('done');
     }
+}
+
+function is_experiment_done() {
+    return !isset($_SESSION['Procedure'][$_SESSION['Position']]);
 }
 
 function get_current_procedure() {
@@ -86,7 +90,38 @@ function send_trial_values_to_javascript($trial_values) {
     
     ?><script>
         COLLECTOR.trial_values = <?= json_encode($trial_values) ?>;
+        COLLECTOR.admin = <?= get_config('admin') ? 'true' : 'false' ?>;
     </script><?php
+}
+
+function load_autosaver() {
+    echo get_link('Links/js/autosave.js');
+    $data = get_autosave_data($_SESSION['Username']);
+    
+    ?><script>
+        autosave.loaded_data = <?= $data ?>;
+    </script><?php
+}
+
+function get_autosave_data($username) {
+    $filename = get_autosave_filename($username);
+    
+    return is_file($filename)
+         ? file_get_contents($filename)
+         : '{"state": {}, "data": []}';
+}
+
+function get_autosave_filename($username) {
+    return get_data_folder() . "/autosave/$username.json";
+}
+
+function save_autosave_data($username, $data) {
+    $filename = get_autosave_filename($username);
+    $dir = dirname($filename);
+    
+    if (!is_dir($dir)) mkdir($dir, 0777, true);
+    
+    file_put_contents($filename, json_encode($data));
 }
 
 ## Retrieving previous trial data

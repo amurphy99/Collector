@@ -7,6 +7,7 @@ function has_submitted_data_to_record() {
 function record_submitted_data() {
     $data = get_processed_data();
     save_experiment_data($data);
+    clear_autosaved();
     advance_trial();
 }
 
@@ -342,4 +343,10 @@ function check_for_errors_in_processed_data($data) {
             throw new Exception("Data field $col not allowed, output must not be in the format 'Post X ...'.");
         }
     }
+}
+
+function clear_autosaved() {
+    $autosave_file = get_autosave_filename($_SESSION['Username']);
+    
+    if (is_file($autosave_file)) unlink($autosave_file);
 }
