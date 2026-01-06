@@ -26,8 +26,15 @@
         margin: 10px;
     }
 </style>
+
+
 <div class="main_container"><div>
-    <div class="prompt"><b>What was the basis for your decision?</b><p>Remember: specific study details come to mind<p>Know: familiar, no details<p>Guess: unsure / guessing?</div>
+    <div class="prompt">
+        <b>What was the basis for your decision?</b>
+        <p>Remember: specific study details come to mind</p>
+        <p>Know: familiar, no details</p>
+        <p>Guess: unsure / guessing?</p>
+    </div>
     <div class="cue_container"><?= $answer ?></div>
     <div class="response_container">
         <button type="button">Remember</button>
@@ -41,13 +48,15 @@
     <button class="collectorButton collectorAdvance" id="FormSubmitButton">Next</button>
 </div>
 
+
 <script>
 
-document.querySelectorAll(".response_container button").forEach(button => {
-    button.addEventListener("click", function() {
-        document.getElementById("response").value = this.innerHTML;
-        document.getElementById("FormSubmitButton").click();
+    document.querySelectorAll(".response_container button").forEach(button => {
+        button.addEventListener("click", function() {
+            document.getElementById("response").value = this.innerHTML;
+            document.getElementById("FormSubmitButton").click();
+        });
     });
-});
 
 </script>
+
