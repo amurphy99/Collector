@@ -13,7 +13,7 @@ This might break things if it just assumes everything in this folder is a trial 
 <br>
 
 
-# Information about new trial types we have created
+# Information about new task types
 
 <details closed> <summary>Recog RKG (2026-01-06)</summary>
 
