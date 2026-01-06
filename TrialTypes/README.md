@@ -58,7 +58,7 @@ Debugging
         echo '<hr>';
 
         // Custom project functions available for use
-        try {$functions = get_defined_functions();print_r($functions['user']); } 
+        try {$functions = get_defined_functions(); print_r($functions['user']); } 
         catch (Exception $e) { echo "Error:"; } 
     
         echo '</pre>';
