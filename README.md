@@ -33,5 +33,16 @@ Collector
 * So to use a task type that was created previously, you copy the `VDRT` folder locally and upload the trials from `TrialTypes/<Trial Name>/TrialTypes` into the corresponding folder on the copy.
 
 
-
+# Helpful Notes
+```php
+// Print the session data
+<div>
+    <h3>Session Data</h3>
+    <?php
+        echo '<pre>';
+        print_r($_SESSION);
+        echo '</pre>';
+    ?>
+</div>
+```
 
